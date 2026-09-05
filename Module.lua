@@ -960,7 +960,7 @@ _tp = function(target)
     end
     
     local distance = (gg.Position - rootPart.Position).Magnitude
-    local tweenInfo = TweenInfo.new(distance / 300, Enum.EasingStyle.Linear)
+    local tweenInfo = TweenInfo.new(distance / 150, Enum.EasingStyle.Linear)
     local tween = game:GetService("TweenService"):Create(block, tweenInfo, {CFrame = gg})    
     
     if plr.Character.Humanoid.Sit == true then
@@ -1989,7 +1989,7 @@ local function TweenToPosition(targetCFrame)
     
     local hrp = char.HumanoidRootPart
     local distance = (hrp.Position - targetCFrame.Position).Magnitude
-    local speed = 300
+    local speed = 150
     
     local tweenInfo = TweenInfo.new(
         distance / speed,
