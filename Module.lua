@@ -211,7 +211,6 @@ end
 BringEnemy = function(Mon)
     if not _B then return end
     if not Mon then 
-        -- Tự động tìm mob nếu không có Mon
         local hrp = plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
         if not hrp then return end
         
@@ -246,7 +245,6 @@ BringEnemy = function(Mon)
     end
     
     pcall(function()
-        -- Tăng simulation radius
         if sethiddenproperty then 
             sethiddenproperty(plr, "SimulationRadius", math.huge)
         end
@@ -259,7 +257,6 @@ BringEnemy = function(Mon)
                 if alive and v.Name == Mon.Name then
                     local distance = (root.Position - targetPos).Magnitude
                     if distance <= 3000 then
-                        -- Tạo BodyVelocity để giữ mob
                         local bv = root:FindFirstChild("BodyVelocity")
                         if not bv then
                             bv = Instance.new("BodyVelocity")
@@ -272,13 +269,11 @@ BringEnemy = function(Mon)
                         if distance <= 10 then
                             AreaMob = true
                         end
-                        
-                        -- Kéo mob lại nếu là network owner và chưa ở gần
+
                         if not AreaMob and Network(root) then
                             root.CFrame = CFrame.new(targetPos)
                         end
-                        
-                        -- Tắt va chạm và ngăn di chuyển
+
                         root.CanCollide = false
                         hum.WalkSpeed = 0
                         hum.JumpPower = 0
