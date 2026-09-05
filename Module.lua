@@ -211,6 +211,7 @@ end
 BringEnemy = function(Mon)
     if not _B then return end
     if not Mon then 
+        -- Tự động tìm mob nếu không có Mon
         local hrp = plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
         if not hrp then return end
         
@@ -245,6 +246,7 @@ BringEnemy = function(Mon)
     end
     
     pcall(function()
+        -- Tăng simulation radius
         if sethiddenproperty then 
             sethiddenproperty(plr, "SimulationRadius", math.huge)
         end
@@ -257,6 +259,7 @@ BringEnemy = function(Mon)
                 if alive and v.Name == Mon.Name then
                     local distance = (root.Position - targetPos).Magnitude
                     if distance <= 3000 then
+                        -- Tạo BodyVelocity để giữ mob
                         local bv = root:FindFirstChild("BodyVelocity")
                         if not bv then
                             bv = Instance.new("BodyVelocity")
@@ -269,11 +272,13 @@ BringEnemy = function(Mon)
                         if distance <= 10 then
                             AreaMob = true
                         end
-
+                        
+                        -- Kéo mob lại nếu là network owner và chưa ở gần
                         if not AreaMob and Network(root) then
                             root.CFrame = CFrame.new(targetPos)
                         end
-
+                        
+                        -- Tắt va chạm và ngăn di chuyển
                         root.CanCollide = false
                         hum.WalkSpeed = 0
                         hum.JumpPower = 0
@@ -2153,6 +2158,23 @@ local function SafeWaitForChild(parent, childName)
     end)
     return result
 end
+
+local FastAttackModule = {}
+local HitRegistrationModule = {}
+local MainController = {}
+local GameService = game
+local Players = GameService:GetService("Players")
+local RunService = GameService:GetService("RunService")
+local ReplicatedStorage = GameService:GetService("ReplicatedStorage")
+local Workspace = GameService:GetService("Workspace")
+local LocalPlayer = Players.LocalPlayer
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local Enemies = SafeWaitForChild(Workspace, "Enemies")
+local Characters = SafeWaitForChild(Workspace, "Characters")
+local Modules = SafeWaitForChild(ReplicatedStorage, "Modules")
+local Net = SafeWaitForChild(Modules, "Net")
+FastAttackModule.Rate = 0.000000002
+FastAttackModule.Enabled = true
 
 function FastAttackModule.IsAlive(target)
     local humanoid = target:FindFirstChild("Humanoid")
@@ -10565,4 +10587,3 @@ if getgenv then
     getgenv().NejiHubCore = NejiHubCore
 end
 return NejiHubCore
-
